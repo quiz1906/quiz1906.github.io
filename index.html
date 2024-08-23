@@ -1,161 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <style>
-        /* Full-Height Background */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            background-color: black; /* Default background color */
-            overflow: hidden; /* Prevent scrolling */
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            position: relative;
-            align-items: center; /* Center horizontally */
-            justify-content: center; /* Center vertically */
-        }
-
-        /* Full-Height Stripes */
-        .stripe {
-            position: absolute;
-            width: 100%;
-        }
-
-        .green {
-            background-color: green;
-            height: 35%;
-            top: 25%; /* Positioned just below the top black stripe */
-        }
-
-        .white {
-            background-color: white;
-            height: 15%;
-            top: 60%; /* Positioned just below the green stripe */
-        }
-
-        /* Centered Content Styling */
-        .outer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: white;
-            border-radius: 20px;
-            border: 3px solid black;
-            position: relative;
-            aspect-ratio: 16 / 9;
-            max-width: 97vw;
-            max-height: 97vh;
-            min-width: 320px;
-            min-height: 180px;
-            opacity: 0; /* Start with the frame invisible */
-            transition: opacity 0.2s ease-in; /* Fade in transition */
-        }
-
-        .inner {
-            width: 99%;
-            height: 98%;
-            background-color: lightgrey;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            transform: scale(1.48);
-            transform-origin: center;
-            position: absolute;
-        }
-
-        /* Button Styling */
-        .play-button {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #000;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .play-button:hover {
-            background-color: #444;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <!-- Striped Background -->
     <div class="stripe green"></div>
     <div class="stripe white"></div>
+    <div id="quiz-container">
+        <div id="question-number"></div>
+        <div id="timer"></div>
+        <div id="question-text"></div>
 
-    <!-- Centered Content -->
-    <div class="outer" id="outer-frame">
-        <div class="inner">
-            <iframe id="content-frame" src="//ligaportugal.vsports.pt/embd/98109/m/19712/liga/f96ab7b86e752aa54f2ee96d69363f62?autostart=true" frameborder="0" scrolling="no"></iframe>
+        <div class="outer" id="outer-frame">
+            <div class="inner">
+                <iframe id="video" frameborder="1" scrolling="no"></iframe>
+            </div>
         </div>
+
+        <div class="answers"></div>
+        <button id="next-button">Next</button>
     </div>
-
-    <!-- Play Button -->
-    <button class="play-button" onclick="playIframe()">Play</button>
-
-    <script>
-        function playIframe() {
-            var iframe = document.getElementById('content-frame');
-            iframe.src = iframe.src;
-        }
-
-        function calculateOuterSize() {
-            var vw = window.innerWidth;
-            var vh = window.innerHeight;
-            var aspectRatio = 16 / 9;
-
-            // Calculate dimensions based on the viewport size while maintaining aspect ratio
-            var newWidth = Math.min(vw * 0.95, vh * aspectRatio * 0.95);
-            var newHeight = newWidth / aspectRatio;
-
-            // Ensure min dimensions are respected
-            newWidth = Math.max(newWidth, 320);
-            newHeight = Math.max(newHeight, 180);
-
-            return { width: newWidth, height: newHeight };
-        }
-
-        function resizeOuter() {
-            var outer = document.getElementById('outer-frame');
-            var size = calculateOuterSize();
-
-            outer.style.width = size.width + 'px';
-            outer.style.height = size.height + 'px';
-            outer.style.opacity = 1; // Make the frame visible after resizing
-        }
-
-        // Apply the correct size before the page fully loads to avoid the jump
-        document.addEventListener('DOMContentLoaded', function() {
-            var size = calculateOuterSize();
-            var outer = document.getElementById('outer-frame');
-            outer.style.width = size.width + 'px';
-            outer.style.height = size.height + 'px';
-            outer.style.opacity = 1; // Make the frame visible after applying the size
-        });
-
-        // Resize the outer frame when the window is resized
-        window.addEventListener('resize', resizeOuter);
-    </script>
+    <script src="app.js"></script>
 </body>
+
 </html>

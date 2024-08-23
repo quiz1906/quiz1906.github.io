@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+
+html, body {
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.stripe {
+    position: absolute;
+    width: 100%;
+}
+
+.green {
+    background-color: green;
+    height: 35%;
+    top: 25%;
+}
+
+.white {
+    background-color: white;
+    height: 15%;
+    top: 60%;
+}
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu', sans-serif;
+    padding: 10px;
+}
+
+#quiz-container {
+    z-index: 1;
+}
+
+#question-number {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#timer {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#question-text {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+#video {
+    width: 640px;
+    height: 360px;
+    transform: scale(1.48);
+    transform-origin: center;
+    position: absolute;
+}
+
+.outer {
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    border: 3px solid white;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    max-width: 97vw;
+    max-height: 97vh;
+    min-width: 320px;
+    min-height: 180px;
+    opacity: 1; 
+    transition: opacity 0.2s ease-in; 
+}
+
+.inner {
+    width: 640px;
+    height: 360px;
+    background-color: lightgrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    transform: scale(1.48);
+    transform-origin: center;
+    position: absolute;
+}
+
+.answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.answers button {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 16px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.answers button:hover {
+    background-color: #0056b3;
+}
+
+#next-button {
+    margin-top: 20px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+}
+
+#next-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
