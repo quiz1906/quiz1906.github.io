@@ -1,5 +1,6 @@
 // DOM Elements
 const questionNumberElement = document.getElementById('question-number');
+const scoreElement = document.getElementById('score');
 const timerElement = document.getElementById('timer');
 const questionElement = document.getElementById('question-text');
 const answersElement = document.querySelector('.answers');
@@ -19,14 +20,17 @@ var videoURL = "";
 nextButton.addEventListener('click', () => {
     currentQuestionIndex++;
     setNextQuestion();
+    nextButton.style.display = 'none';
+    nextButton.textContent = "Next";
 });
 
 //restartButton.addEventListener('click', startQuiz);
 
 // Fetch and Start Quiz
-async function startQuiz() {
+async function setupQuiz() {
     score = 0;
     currentQuestionIndex = 0;
+    videoElement.style.opacity = 0; 
 
     // Fetch quiz data
     questions = await fetchQuizData();
@@ -39,7 +43,9 @@ async function startQuiz() {
 
     // Randomly select 10 questions
     selectedQuestions = selectRandomQuestions(questions, 10);
-    setNextQuestion();
+    nextButton.textContent = "Start";
+    nextButton.style.display = 'block';
+    updateQuestionNumber();
 }
 
 async function fetchQuizData() {
@@ -77,17 +83,24 @@ function setNextQuestion() {
 
     showQuestion(selectedQuestions[currentQuestionIndex]);
     updateQuestionNumber();
-    startTimer();
+
+    timerElement.textContent = "Get Ready...";
+    setTimeout(function() {
+        startTimer();
+        videoElement.style.opacity = 1; 
+    }, 2000); // Delay of 2000ms
 }
 
 function showQuestion(questionData) {
     const [round, url, question, answer0, answer1, answer2, answer3, correctIndex] = questionData;
-    questionElement.innerText = question;
+    videoElement.style.opacity = 0; 
+    videoElement.src = url;
+    questionElement.textContent = question;
 
     const answers = [answer0, answer1, answer2, answer3];
     answers.forEach((answer, index) => {
         const button = document.createElement('button');
-        button.innerText = answer;
+        button.textContent = answer;
         button.classList.add('btn');
         if (index == correctIndex) {
             button.dataset.correct = true;
@@ -95,24 +108,19 @@ function showQuestion(questionData) {
         button.addEventListener('click', selectAnswer);
         answersElement.appendChild(button);
     });
-
-    videoURL = url;
 }
 
 function resetState() {
-    nextButton.style.display = 'none';
     while (answersElement.firstChild) {
         answersElement.removeChild(answersElement.firstChild);
     }
     clearInterval(timerInterval); // Clear any existing timer
     timeRemaining = 10;
-    timerElement.innerText = `Time: ${timeRemaining.toFixed(1)}s`; // Reset timer display
+    timerElement.textContent = `Time: ${timeRemaining.toFixed(1)}s`; // Reset timer display
 }
 
 function selectAnswer(e) {
     const selectedButton = e.target;
-
-    videoElement.src = videoURL;
 
     // Check if selectedButton and its dataset are valid
     if (!selectedButton || !selectedButton.dataset) {
@@ -130,19 +138,22 @@ function selectAnswer(e) {
 
     // Highlight only the selected button based on whether it is correct or wrong
     Array.from(answersElement.children).forEach(button => {
-        button.classList.remove('correct', 'wrong'); // Remove previous states
-        button.disabled = true; // Disable all buttons
+        if (button.dataset.correct) {
+            button.classList.add('correct');
+        } else {
+            button.classList.add('wrong');
+        }
+        button.disabled = true; 
     });
-
-    if (selectedButton.dataset.correct) {
-        selectedButton.classList.add('correct');
-    } else {
-        selectedButton.classList.add('wrong');
-    }
+    
+    selectedButton.style.border = '3px solid white';
 
     // Stop the timer when an answer is selected
     clearInterval(timerInterval);
     nextButton.style.display = 'block';
+
+    // update the score
+    updateQuestionNumber();
 }
 
 
@@ -171,12 +182,14 @@ function startTimer() {
             selectAnswer({ target: {} }); // Automatically select an empty answer if time runs out
         }
 
-        timerElement.innerText = `Time: ${timeRemaining.toFixed(1)}s`;
+        timerElement.textContent = `${timeRemaining.toFixed(1)}`;
     }, 100);
 }
 
 function updateQuestionNumber() {
-    questionNumberElement.textContent = `Question ${currentQuestionIndex + 1} / 10`;
+    questionNumberElement.textContent = `${currentQuestionIndex + 1}/10`;
+    let scoreValue = Math.round(score);
+    scoreElement.textContent = `${scoreValue}`;
 }
 
 function showResult() {
@@ -184,5 +197,4 @@ function showResult() {
 //    resultText.innerText = `You scored ${score} points!`;
 }
 
-// Start the quiz when the page loads
-startQuiz();
+setupQuiz();

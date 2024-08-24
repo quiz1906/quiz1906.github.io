@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-html, body {
+html,
+body {
     font-family: 'Bebas Neue', sans-serif;
     background-color: #000000;
     color: #ffffff;
@@ -19,17 +20,23 @@ html, body {
     justify-content: space-between;
     padding: 0 20px;
     box-sizing: border-box;
-    background-color: green; /* Add a green background to the header */
-    border-radius: 5px; /* Optional: Add rounded corners for a better look */    
+    background-color: green;
+    /* Add a green background to the header */
+    border-radius: 5px;
+    /* Optional: Add rounded corners for a better look */
 }
 
-#question-number, #timer {
+#question-number,
+#score,
+#timer {
     font-size: 18px;
     font-weight: 500;
     color: white;
     background-color: green;
-    padding: 5px 5px; /* Add some padding */
-    border-radius: 5px; /* Optional: Add rounded corners for buttons */    
+    padding: 5px 5px;
+    /* Add some padding */
+    border-radius: 5px;
+    /* Optional: Add rounded corners for buttons */
 }
 
 #question-text {
@@ -49,19 +56,22 @@ html, body {
     background-color: white;
     border-radius: 5px;
     border: 3px solid white;
-    width: 95vw; /* Set width based on viewport width */
-    height: auto; /* Maintain aspect ratio */
+    width: 95vw;
+    /* Set width based on viewport width */
+    height: auto;
+    /* Maintain aspect ratio */
     max-width: 640px;
     max-height: 360px;
     margin: 0 auto 10px;
     overflow: hidden;
-    aspect-ratio: 16 / 9; /* Maintain a 16:9 aspect ratio */    
+    aspect-ratio: 16 / 9;
+    /* Maintain a 16:9 aspect ratio */
 }
 
 .inner {
     width: 100%;
     height: 100%;
-    background-color: lightgrey;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,6 +86,10 @@ iframe {
     transform: scale(1.48);
     transform-origin: center;
     position: absolute;
+}
+
+iframe.fade-in {
+    opacity: 1;
 }
 
 .answers {
@@ -96,7 +110,7 @@ iframe {
     padding: 10px;
     background-color: white;
     color: black;
-    border: none;
+    border: 2px solid transparent;
     border-radius: 5px;
     cursor: crosshair;
     min-height: 40px;
@@ -104,6 +118,17 @@ iframe {
 
 .answers button:hover {
     background-color: green;
+    color: white;
+    cursor: crosshair;
+}
+
+.answers button.correct {
+    background-color: green;
+    color: white;
+}
+
+.answers button.wrong {
+    background-color: red;
     color: white;
 }
 
@@ -116,7 +141,6 @@ iframe {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    display: none;
     min-height: 40px;
     margin: 0 auto 20px;
 }
