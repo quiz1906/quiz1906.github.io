@@ -30,7 +30,7 @@ nextButton.addEventListener('click', () => {
 async function setupQuiz() {
     score = 0;
     currentQuestionIndex = 0;
-    videoElement.style.opacity = 0; 
+    videoElement.style.opacity = 0;
 
     // Fetch quiz data
     questions = await fetchQuizData();
@@ -49,11 +49,11 @@ async function setupQuiz() {
 }
 
 async function fetchQuizData() {
-    const sheetId = '1G_9MKgv0tCT53b3RULeAJso5NcwfBpJMxMh2-nc_eZY'; 
-    const apiKey = 'AIzaSyCzfZsQXsHUJR2CWFwxH2iyZ1f9z5gI41g'; 
-    const sheetName = '24_25_questions'; 
+    const sheetId = '1G_9MKgv0tCT53b3RULeAJso5NcwfBpJMxMh2-nc_eZY';
+    const apiKey = 'AIzaSyCzfZsQXsHUJR2CWFwxH2iyZ1f9z5gI41g';
+    const sheetName = '24_25_questions';
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A2:H?key=${apiKey}`;
-    
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -75,7 +75,7 @@ function selectRandomQuestions(questions, numberOfQuestions) {
 
 function setNextQuestion() {
     resetState();
-    
+
     if (currentQuestionIndex >= selectedQuestions.length) {
         showResult();
         return;
@@ -85,15 +85,15 @@ function setNextQuestion() {
     updateQuestionNumber();
 
     timerElement.textContent = "Get Ready...";
-    setTimeout(function() {
+    setTimeout(function () {
         startTimer();
-        videoElement.style.opacity = 1; 
+        videoElement.style.opacity = 1;
     }, 2000); // Delay of 2000ms
 }
 
 function showQuestion(questionData) {
     const [round, url, question, answer0, answer1, answer2, answer3, correctIndex] = questionData;
-    videoElement.style.opacity = 0; 
+    videoElement.style.opacity = 0;
     videoElement.src = url;
     questionElement.textContent = question;
 
@@ -116,7 +116,7 @@ function resetState() {
     }
     clearInterval(timerInterval); // Clear any existing timer
     timeRemaining = 10;
-    timerElement.textContent = `Time: ${timeRemaining.toFixed(1)}s`; // Reset timer display
+    timerElement.textContent = `${timeRemaining.toFixed(1)}`; // Reset timer display
 }
 
 function selectAnswer(e) {
@@ -124,16 +124,14 @@ function selectAnswer(e) {
 
     // Check if selectedButton and its dataset are valid
     if (!selectedButton || !selectedButton.dataset) {
-        // If no button is selected or dataset is undefined, award 0 points and move to the next question
         console.log('Timer ran out or no valid button selected. Awarding 0 points.');
-        clearInterval(timerInterval);
-        nextButton.style.display = 'block';
-        return;
     }
-
-    const correct = selectedButton.dataset.correct;
-    if (correct) {
-        score += timeRemaining * 1000; // Award points based on remaining time
+    else {
+        selectedButton.style.border = '3px solid white'
+        const correct = selectedButton.dataset.correct;
+        if (correct) {
+            score += timeRemaining * 1000; // Award points based on remaining time
+        }
     }
 
     // Highlight only the selected button based on whether it is correct or wrong
@@ -143,10 +141,9 @@ function selectAnswer(e) {
         } else {
             button.classList.add('wrong');
         }
-        button.disabled = true; 
+        button.disabled = true;
     });
-    
-    selectedButton.style.border = '3px solid white';
+
 
     // Stop the timer when an answer is selected
     clearInterval(timerInterval);
@@ -174,7 +171,7 @@ function clearStatusClass(element) {
 function startTimer() {
     timerInterval = setInterval(() => {
         timeRemaining -= 0.1; // Decrease by 0.1 seconds
-        
+
         if (timeRemaining <= 0) {
             timeRemaining = 0; // Ensure the timer stops at 0
             clearInterval(timerInterval);
@@ -193,8 +190,8 @@ function updateQuestionNumber() {
 }
 
 function showResult() {
-//    resultContainer.style.display = 'block';
-//    resultText.innerText = `You scored ${score} points!`;
+    //    resultContainer.style.display = 'block';
+    //    resultText.innerText = `You scored ${score} points!`;
 }
 
 setupQuiz();
