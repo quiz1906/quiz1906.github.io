@@ -6,6 +6,7 @@ const questionElement = document.getElementById('question-text');
 const answersElement = document.querySelector('.answers');
 const videoElement = document.getElementById('video');
 const nextButton = document.getElementById('next-button');
+const feedbackText = document.getElementById('feedback-text');
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -21,7 +22,7 @@ nextButton.addEventListener('click', () => {
     currentQuestionIndex++;
     setNextQuestion();
     nextButton.style.display = 'none';
-    nextButton.textContent = "Next";
+    nextButton.textContent = "Próxima pergunta";
 });
 
 //restartButton.addEventListener('click', startQuiz);
@@ -34,7 +35,7 @@ async function setupQuiz() {
 
     // Fetch quiz data
     questions = await fetchQuizData();
-    console.log('Questions:', questions);
+    //console.log('Questions:', questions);
 
     if (questions.length === 0) {
         console.error('No questions were loaded.');
@@ -43,7 +44,7 @@ async function setupQuiz() {
 
     // Randomly select 10 questions
     selectedQuestions = selectRandomQuestions(questions, 10);
-    nextButton.textContent = "Start";
+    nextButton.textContent = "Começar";
     nextButton.style.display = 'block';
     updateQuestionNumber();
 }
@@ -52,7 +53,7 @@ async function fetchQuizData() {
     const sheetId = '1G_9MKgv0tCT53b3RULeAJso5NcwfBpJMxMh2-nc_eZY';
     const apiKey = 'AIzaSyCzfZsQXsHUJR2CWFwxH2iyZ1f9z5gI41g';
     const sheetName = '24_25_questions';
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A2:H?key=${apiKey}`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A2:M?key=${apiKey}`;
 
     try {
         const response = await fetch(url);
@@ -84,7 +85,7 @@ function setNextQuestion() {
     showQuestion(selectedQuestions[currentQuestionIndex]);
     updateQuestionNumber();
 
-    timerElement.textContent = "Get Ready...";
+    timerElement.textContent = "Prepare-se...";
     setTimeout(function () {
         startTimer();
         videoElement.style.opacity = 1;
@@ -92,10 +93,19 @@ function setNextQuestion() {
 }
 
 function showQuestion(questionData) {
-    const [round, url, question, answer0, answer1, answer2, answer3, correctIndex] = questionData;
+    const [type, round, url, question, answer0, answer1, answer2, answer3, correctIndex, finalScore, homeOrAway, opponent, desc] = questionData;
     videoElement.style.opacity = 0;
     videoElement.src = url;
     questionElement.textContent = question;
+
+    inf = "";
+    if (homeOrAway == "Home") {
+        inf = "Journada " + round + " : Sporting CP " + finalScore + " " + opponent + "<br>";
+    } else {
+        inf = "Journada " + round + " : Sporting CP " + finalScore + " " + opponent + "<br>";
+    }
+    feedbackText.innerHTML = inf + desc;
+    feedbackText.style.display = 'none';
 
     const answers = [answer0, answer1, answer2, answer3];
     answers.forEach((answer, index) => {
@@ -115,8 +125,12 @@ function resetState() {
         answersElement.removeChild(answersElement.firstChild);
     }
     clearInterval(timerInterval); // Clear any existing timer
-    timeRemaining = 10;
+    timeRemaining = 30;
     timerElement.textContent = `${timeRemaining.toFixed(1)}`; // Reset timer display
+}
+
+function showFeedback() {
+    feedbackText.style.display = 'block';
 }
 
 function selectAnswer(e) {
@@ -144,6 +158,7 @@ function selectAnswer(e) {
         button.disabled = true;
     });
 
+    showFeedback();
 
     // Stop the timer when an answer is selected
     clearInterval(timerInterval);

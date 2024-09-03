@@ -15,39 +15,38 @@ body {
 #header {
     width: 100%;
     max-width: 640px;
-    margin: 20px auto 10px;
+    margin: 10px auto 5px;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
+    align-items: center; /* Center items vertically */    
+    padding: 0 10px; 
     box-sizing: border-box;
     background-color: green;
-    /* Add a green background to the header */
     border-radius: 5px;
-    /* Optional: Add rounded corners for a better look */
+    border: 0px solid green;
+    min-height: 40px; /* Match min-height with .answers button */
 }
 
 #question-number,
 #score,
 #timer {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 22px;
+    font-weight: 400;
+    padding: 10px;
     color: white;
     background-color: green;
     padding: 5px 5px;
-    /* Add some padding */
     border-radius: 5px;
-    /* Optional: Add rounded corners for buttons */
 }
 
 #question-text {
     width: 100%;
     max-width: 640px;
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 400;
     color: white;
-    margin: 10px auto 0;
-    min-height: 60px;
-    padding: 10px 0px;
+    margin: 10px auto 10px;
+    padding: 0px 0px;
     box-sizing: border-box;
     word-wrap: break-word;
 }
@@ -56,16 +55,14 @@ body {
     background-color: white;
     border-radius: 5px;
     border: 3px solid white;
-    width: 95vw;
-    /* Set width based on viewport width */
+    width: 100%;
     height: auto;
-    /* Maintain aspect ratio */
     max-width: 640px;
     max-height: 360px;
-    margin: 0 auto 10px;
+    margin: 10px auto 10px;
     overflow: hidden;
     aspect-ratio: 16 / 9;
-    /* Maintain a 16:9 aspect ratio */
+    box-sizing: border-box;
 }
 
 .inner {
@@ -98,16 +95,16 @@ iframe.fade-in {
     grid-gap: 10px;
     width: 100%;
     max-width: 640px;
-    margin: 0 auto 20px;
-    padding: 0 20px;
+    margin: 0 auto 10px;
+    padding: 0; 
     box-sizing: border-box;
 }
 
 .answers button {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    padding: 10px;
+    font-size: 22px;
+    font-weight: 400;
+    padding: 0px;
     background-color: white;
     color: black;
     border: 2px solid transparent;
@@ -132,17 +129,45 @@ iframe.fade-in {
     color: white;
 }
 
+#feedback-text {
+    width: 100%;
+    max-width: 640px;
+    font-size: 22px;
+    font-weight: 400;
+    background-color: black;
+    color: white;
+    margin: 10px auto 10px;
+    min-height: 60px;
+    padding: 0px 0px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+}
+
+.hidden {
+    display: none;
+}
+
 #next-button {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    padding: 10px 20px;
-    background-color: green;
-    color: white;
+    font-size: 22px;
+    font-weight: 400;
+    padding: 0px; /* Match padding with .answers button */
+    background-color: white;
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    min-height: 40px;
-    margin: 0 auto 20px;
+    margin: 0 auto 10px;
+    width: calc((640px / 2) - 5px); /* Exact width matching one .answers button */
+    max-width: calc((100% / 2) - 5px); /* Fallback for smaller screens */
+    min-height: 40px; /* Match min-height with .answers button */
+    box-sizing: border-box; /* Ensures padding is included in height */
+}
+
+#next-button:hover {
+    background-color: green;
+    color: white;
+    cursor: crosshair;
 }
 
 #next-button:disabled {
