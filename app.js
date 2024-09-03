@@ -100,11 +100,11 @@ function showQuestion(questionData) {
 
     inf = "";
     if (homeOrAway == "Home") {
-        inf = "Journada " + round + " : Sporting CP " + finalScore + " " + opponent + "<br>";
+        inf = "<span style='color: green;'>Jornada " + round + " : Sporting CP " + finalScore + " " + opponent + "<br>";
     } else {
-        inf = "Journada " + round + " : Sporting CP " + finalScore + " " + opponent + "<br>";
+        inf = "<span style='color: green;'>Jornada " + round + " : " + opponent + finalScore + " Sporting CP<br>";
     }
-    feedbackText.innerHTML = inf + desc;
+    feedbackText.innerHTML = inf + desc + "</span>";
     feedbackText.style.display = 'none';
 
     const answers = [answer0, answer1, answer2, answer3];
