@@ -102,7 +102,7 @@ function showQuestion(questionData) {
     if (homeOrAway == "Home") {
         inf = "<span style='color: green;'>Jornada " + round + " : Sporting CP " + finalScore + " " + opponent + "<br>";
     } else {
-        inf = "<span style='color: green;'>Jornada " + round + " : " + opponent + finalScore + " Sporting CP<br>";
+        inf = "<span style='color: green;'>Jornada " + round + " : " + opponent + " " + finalScore + " Sporting CP<br>";
     }
     feedbackText.innerHTML = inf + desc + "</span>";
     feedbackText.style.display = 'none';
