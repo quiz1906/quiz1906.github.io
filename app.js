@@ -29,9 +29,13 @@ nextButton.addEventListener('click', () => {
 
 // Fetch and Start Quiz
 async function setupQuiz() {
+
+    // Set the iframe to center the image
+    videoElement.style.backgroundImage = "url('sporting_badge.png')";
+    videoElement.style.opacity = 1;
+
     score = 0;
     currentQuestionIndex = 0;
-    videoElement.style.opacity = 0;
 
     // Fetch quiz data
     questions = await fetchQuizData();
