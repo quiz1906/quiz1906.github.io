@@ -178,3 +178,26 @@ iframe.fade-in {
     background-color: grey;
     cursor: not-allowed;
 }
+
+#share-button {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    padding: 0px; /* Match padding with .answers button */
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 auto 10px;
+    width: calc((640px / 2) - 5px); /* Exact width matching one .answers button */
+    max-width: calc((100% / 2) - 5px); /* Fallback for smaller screens */
+    min-height: 40px; /* Match min-height with .answers button */
+    box-sizing: border-box; /* Ensures padding is included in height */
+}
+
+#share-button:hover {
+    background-color: green;
+    color: white;
+    cursor: crosshair;
+}

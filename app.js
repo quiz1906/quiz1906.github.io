@@ -6,6 +6,7 @@ const questionElement = document.getElementById('question-text');
 const answersElement = document.querySelector('.answers');
 const videoElement = document.getElementById('video');
 const nextButton = document.getElementById('next-button');
+const shareButton = document.getElementById('share-button');
 const feedbackText = document.getElementById('feedback-text');
 
 let currentQuestionNum = 1;
@@ -24,6 +25,9 @@ async function setupQuiz() {
     score = 0;
     numCorrect = 0;
     currentQuestionNum = 1;
+
+    // Hide share button
+    shareButton.style.display = 'none';
 
     // Fetch quiz data
     questions = await fetchQuizData();
@@ -206,17 +210,7 @@ function showResult() {
     let finalScore = Math.round(score);
     scoreElement.textContent = `Pontuação final: ${finalScore}`;
 
-    const url = 'https://www.example.com'; // Replace with the URL you want to share
-    const text = 'Check out this awesome website!'; // Optional: Text to accompany the URL
-
-    // Encode the text and URL for use in a query string
-    const encodedText = encodeURIComponent(text);
-    const encodedUrl = encodeURIComponent(url);
-
-    // WhatsApp sharing URL
-    const shareUrl = `https://wa.me/?text=${encodedText}%20${encodedUrl}`;
-
-    //window.open(shareUrl, '_blank');
+    shareButton.style.display = 'block';
 
     // Reset the quiz for a new game
     nextButton.textContent = "Reiniciar Jogo";
@@ -225,12 +219,28 @@ function showResult() {
     nextButton.addEventListener('click', setupQuiz);
 }
 
+function shareWhatsApp() {
+    const url = 'https://quiz1906.github.io/'; 
+    let finalScore = Math.round(score);
+    const text = `Acabei de fazer ${finalScore} com ${numCorrect}/${numQuestions} perguntas corretas no Quiz1906. Achas que consegues bater isso?"`;
+    
+    // Encode the text and URL for use in a query string
+    const encodedText = encodeURIComponent(text);
+    const encodedUrl = encodeURIComponent(url);
+
+    // WhatsApp sharing URL
+    const shareUrl = `https://wa.me/?text=${encodedText}%20${encodedUrl}`;
+
+    window.open(shareUrl, '_blank');
+}
+
 // Set the iframe to center the image
 videoElement.style.backgroundImage = "url('sporting_badge.png')";
 videoElement.style.opacity = 1;
-
 scoreElement.textContent = `quiz1906.github.io`;
-
+// Share button
+shareButton.style.display = 'none';
+shareButton.addEventListener('click', shareWhatsApp);
 // Start button
 nextButton.textContent = "Começar";
 nextButton.style.display = 'block';
