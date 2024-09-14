@@ -8,7 +8,7 @@ const videoElement = document.getElementById('video');
 const nextButton = document.getElementById('next-button');
 const feedbackText = document.getElementById('feedback-text');
 
-let currentQuestionNum = 0;
+let currentQuestionNum = 1;
 let score = 0;
 let numQuestions = 2;
 let numCorrect = 0;
@@ -22,6 +22,7 @@ var videoURL = "";
 // Fetch and Start Quiz
 async function setupQuiz() {
     score = 0;
+    numCorrect = 0;
     currentQuestionNum = 1;
 
     // Fetch quiz data
@@ -35,7 +36,11 @@ async function setupQuiz() {
 
     // Randomly select the questions
     selectedQuestions = selectRandomQuestions(questions, numQuestions);
-    updateQuestionNumber();
+
+    nextButton.removeEventListener('click', setupQuiz);
+    nextButton.addEventListener('click', setNextQuestion);
+    
+    setNextQuestion();
 }
 
 async function fetchQuizData() {
@@ -64,6 +69,7 @@ function selectRandomQuestions(questions, numberOfQuestions) {
 }
 
 function setNextQuestion() {
+    nextButton.style.display = 'none';
 
     while (answersElement.firstChild) {
         answersElement.removeChild(answersElement.firstChild);
@@ -113,6 +119,9 @@ function showQuestion(questionData) {
 function selectAnswer(e) {
     const selectedButton = e.target;
 
+    // Stop the timer when an answer is selected
+    clearInterval(timerInterval);
+
     // Check if selectedButton and its dataset are valid
     if (!selectedButton || !selectedButton.dataset) {
         console.log('Timer ran out or no valid button selected. Awarding 0 points.');
@@ -121,7 +130,7 @@ function selectAnswer(e) {
         selectedButton.style.border = '3px solid white'
         const correct = selectedButton.dataset.correct;
         if (correct) {
-            score += timeRemaining * 1000; // Award points based on remaining time
+            score += timeRemaining * 10; // Award points based on remaining time
             numCorrect += 1;
         }
     }
@@ -139,21 +148,18 @@ function selectAnswer(e) {
     // Shows the description feedback text
     feedbackText.style.display = 'block';
 
+    // update the score
+    updateQuestionNumber();
+
     // If this was last question then show final score and return
     if (currentQuestionNum == numQuestions) {
         showResult();
         return;
     }
 
-    // Stop the timer when an answer is selected
-    clearInterval(timerInterval);
-
     nextButton.textContent = "Próxima pergunta";
     nextButton.style.display = 'block';
-    nextButton.addEventListener('click', setNextQuestion);
-
-    // update the score
-    updateQuestionNumber();
+    currentQuestionNum++;
 }
 
 function setStatusClass(element, correct) {
@@ -186,19 +192,19 @@ function startTimer() {
 }
 
 function updateQuestionNumber() {
-    questionNumberElement.textContent = `${currentQuestionNum}/10`;
+    questionNumberElement.textContent = `${currentQuestionNum}/${numQuestions}`;
     let scoreValue = Math.round(score);
-    scoreElement.textContent = `${scoreValue}`;
+    scoreElement.textContent = `Pontuação: ${scoreValue}`;
 }
 
 function showResult() {
     //    resultContainer.style.display = 'block';
     //    resultText.innerText = `You scored ${score} points!`;
 
-    questionNumberElement.textContent = `Correct: ${numCorrect}/10`;
+    questionNumberElement.textContent = `Correct: ${numCorrect}/${numQuestions}`;
     scoreElement.textContent = "";
     let finalScore = Math.round(score);
-    timerElement.textContent = `Final Score: ${finalScore}`;
+    scoreElement.textContent = `Pontuação final: ${finalScore}`;
 
     const url = 'https://www.example.com'; // Replace with the URL you want to share
     const text = 'Check out this awesome website!'; // Optional: Text to accompany the URL
@@ -213,21 +219,19 @@ function showResult() {
     //window.open(shareUrl, '_blank');
 
     // Reset the quiz for a new game
-    nextButton.textContent = "Restart Game";
+    nextButton.textContent = "Reiniciar Jogo";
     nextButton.style.display = 'block';
+    nextButton.removeEventListener('click', setNextQuestion);
     nextButton.addEventListener('click', setupQuiz);
 }
 
-nextButton.addEventListener('click', () => {
-    setNextQuestion();
-    nextButton.style.display = 'none';
-});
-
 // Set the iframe to center the image
 videoElement.style.backgroundImage = "url('sporting_badge.png')";
-
 videoElement.style.opacity = 1;
 
+scoreElement.textContent = `quiz1906.github.io`;
+
+// Start button
 nextButton.textContent = "Começar";
 nextButton.style.display = 'block';
 nextButton.addEventListener('click', setupQuiz);
