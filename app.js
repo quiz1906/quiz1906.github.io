@@ -8,34 +8,21 @@ const videoElement = document.getElementById('video');
 const nextButton = document.getElementById('next-button');
 const feedbackText = document.getElementById('feedback-text');
 
-let currentQuestionIndex = 0;
+let currentQuestionNum = 0;
 let score = 0;
-let timeRemaining = 10; // in seconds
+let numQuestions = 2;
+let numCorrect = 0;
+let timeRemaining = 30; // in seconds
 let timerInterval;
 let questions = []; // To store the fetched quiz data
 let selectedQuestions = []; // To store the 10 selected random questions
 
 var videoURL = "";
 
-// Event Listeners
-nextButton.addEventListener('click', () => {
-    currentQuestionIndex++;
-    setNextQuestion();
-    nextButton.style.display = 'none';
-    nextButton.textContent = "Próxima pergunta";
-});
-
-//restartButton.addEventListener('click', startQuiz);
-
 // Fetch and Start Quiz
 async function setupQuiz() {
-
-    // Set the iframe to center the image
-    videoElement.style.backgroundImage = "url('sporting_badge.png')";
-    videoElement.style.opacity = 1;
-
     score = 0;
-    currentQuestionIndex = 0;
+    currentQuestionNum = 1;
 
     // Fetch quiz data
     questions = await fetchQuizData();
@@ -46,10 +33,8 @@ async function setupQuiz() {
         return;
     }
 
-    // Randomly select 10 questions
-    selectedQuestions = selectRandomQuestions(questions, 10);
-    nextButton.textContent = "Começar";
-    nextButton.style.display = 'block';
+    // Randomly select the questions
+    selectedQuestions = selectRandomQuestions(questions, numQuestions);
     updateQuestionNumber();
 }
 
@@ -79,14 +64,15 @@ function selectRandomQuestions(questions, numberOfQuestions) {
 }
 
 function setNextQuestion() {
-    resetState();
 
-    if (currentQuestionIndex >= selectedQuestions.length) {
-        showResult();
-        return;
+    while (answersElement.firstChild) {
+        answersElement.removeChild(answersElement.firstChild);
     }
+    clearInterval(timerInterval); // Clear any existing timer
+    timeRemaining = 30;
+    timerElement.textContent = `${timeRemaining.toFixed(1)}`; // Reset timer display
 
-    showQuestion(selectedQuestions[currentQuestionIndex]);
+    showQuestion(selectedQuestions[currentQuestionNum - 1]);
     updateQuestionNumber();
 
     timerElement.textContent = "Prepare-se...";
@@ -124,19 +110,6 @@ function showQuestion(questionData) {
     });
 }
 
-function resetState() {
-    while (answersElement.firstChild) {
-        answersElement.removeChild(answersElement.firstChild);
-    }
-    clearInterval(timerInterval); // Clear any existing timer
-    timeRemaining = 30;
-    timerElement.textContent = `${timeRemaining.toFixed(1)}`; // Reset timer display
-}
-
-function showFeedback() {
-    feedbackText.style.display = 'block';
-}
-
 function selectAnswer(e) {
     const selectedButton = e.target;
 
@@ -149,6 +122,7 @@ function selectAnswer(e) {
         const correct = selectedButton.dataset.correct;
         if (correct) {
             score += timeRemaining * 1000; // Award points based on remaining time
+            numCorrect += 1;
         }
     }
 
@@ -162,16 +136,25 @@ function selectAnswer(e) {
         button.disabled = true;
     });
 
-    showFeedback();
+    // Shows the description feedback text
+    feedbackText.style.display = 'block';
+
+    // If this was last question then show final score and return
+    if (currentQuestionNum == numQuestions) {
+        showResult();
+        return;
+    }
 
     // Stop the timer when an answer is selected
     clearInterval(timerInterval);
+
+    nextButton.textContent = "Próxima pergunta";
     nextButton.style.display = 'block';
+    nextButton.addEventListener('click', setNextQuestion);
 
     // update the score
     updateQuestionNumber();
 }
-
 
 function setStatusClass(element, correct) {
     clearStatusClass(element);
@@ -203,7 +186,7 @@ function startTimer() {
 }
 
 function updateQuestionNumber() {
-    questionNumberElement.textContent = `${currentQuestionIndex + 1}/10`;
+    questionNumberElement.textContent = `${currentQuestionNum}/10`;
     let scoreValue = Math.round(score);
     scoreElement.textContent = `${scoreValue}`;
 }
@@ -211,6 +194,40 @@ function updateQuestionNumber() {
 function showResult() {
     //    resultContainer.style.display = 'block';
     //    resultText.innerText = `You scored ${score} points!`;
+
+    questionNumberElement.textContent = `Correct: ${numCorrect}/10`;
+    scoreElement.textContent = "";
+    let finalScore = Math.round(score);
+    timerElement.textContent = `Final Score: ${finalScore}`;
+
+    const url = 'https://www.example.com'; // Replace with the URL you want to share
+    const text = 'Check out this awesome website!'; // Optional: Text to accompany the URL
+
+    // Encode the text and URL for use in a query string
+    const encodedText = encodeURIComponent(text);
+    const encodedUrl = encodeURIComponent(url);
+
+    // WhatsApp sharing URL
+    const shareUrl = `https://wa.me/?text=${encodedText}%20${encodedUrl}`;
+
+    //window.open(shareUrl, '_blank');
+
+    // Reset the quiz for a new game
+    nextButton.textContent = "Restart Game";
+    nextButton.style.display = 'block';
+    nextButton.addEventListener('click', setupQuiz);
 }
 
-setupQuiz();
+nextButton.addEventListener('click', () => {
+    setNextQuestion();
+    nextButton.style.display = 'none';
+});
+
+// Set the iframe to center the image
+videoElement.style.backgroundImage = "url('sporting_badge.png')";
+
+videoElement.style.opacity = 1;
+
+nextButton.textContent = "Começar";
+nextButton.style.display = 'block';
+nextButton.addEventListener('click', setupQuiz);
