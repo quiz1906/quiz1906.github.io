@@ -11,20 +11,20 @@ const feedbackText = document.getElementById('feedback-text');
 
 let currentQuestionNum = 1;
 let score = 0;
-let numQuestions = 2;
+let numQuestions = 10;
 let numCorrect = 0;
 let timeRemaining = 30; // in seconds
 let timerInterval;
 let questions = []; // To store the fetched quiz data
 let selectedQuestions = []; // To store the 10 selected random questions
 
-var videoURL = "";
-
 // Fetch and Start Quiz
 async function setupQuiz() {
     score = 0;
     numCorrect = 0;
     currentQuestionNum = 1;
+
+    videoElement.src = "";
 
     // Hide share button
     shareButton.style.display = 'none';
