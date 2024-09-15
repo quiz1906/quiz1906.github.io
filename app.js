@@ -103,7 +103,7 @@ async function fetchRowsInSingleCall(rowNumbers) {
         console.error('Error fetching rows:', error);
         throw error;
     }
-
+}
 
 // Main function to get 100 random rows
 async function getRandomRows() {
@@ -123,7 +123,7 @@ async function fetchQuizData() {
     try {
         // Fetch the questions
         let q = await getRandomRows();
-//        console.log("Fetched questions:", q); // Log fetched data
+        //console.log("Fetched questions:", q); // Log fetched data
 
         if (!q || !Array.isArray(q)) {
             throw new Error("Invalid question data format. Expected an array.");
