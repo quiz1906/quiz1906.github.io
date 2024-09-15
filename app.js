@@ -45,6 +45,7 @@ async function setupQuiz() {
 
     nextButton.removeEventListener('click', setupQuiz);
     nextButton.addEventListener('click', setNextQuestion);
+    hideSpinner();
 
     setNextQuestion();
 }
@@ -214,9 +215,7 @@ function setNextQuestion() {
     updateQuestionNumber();
 
     timerElement.textContent = "Prepare-se...";
-    showSpinner();
     setTimeout(function () {
-        hideSpinner();
         startTimer();
         videoElement.style.opacity = 1;
     }, 2000); // Delay of 2000ms
