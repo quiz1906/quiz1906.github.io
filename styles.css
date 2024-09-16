@@ -222,6 +222,11 @@ iframe.fade-in {
 }
 
 .video-js {
-    width: 640px;
-    height: 360px;
+    width: 640px; /* Set the width of the video */
+    height: 360px; /* Set the height of the video */
+    object-fit: cover; /* Make sure the poster image covers the video area */
+  }
+  
+  .video-js .vjs-poster {
+    object-fit: cover; /* Ensure the poster image covers the video area */
   }
