@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>quiz1906</title>
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -17,7 +18,16 @@
 
     <div class="outer" id="outer-frame">
         <div class="inner">
-            <iframe id="video" muted="true" allow="autoplay" frameborder="0" scrolling="no"></iframe>
+            <!--        <iframe id="video" muted="true" allow="autoplay" frameborder="0" scrolling="no"></iframe> -->
+            <!-- Video.js player -->
+            <video id="my-video" class="video-js" preload="auto" width="640" height="360" poster="sporting_badge.png">
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
+
         </div>
     </div>
 
@@ -32,6 +42,8 @@
     <button id="share-button">Share</button>
     <button id="next-button"></button>
 
+    <!-- Video.js JavaScript -->
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script src="app.js"></script>
 </body>
 

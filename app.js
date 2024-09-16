@@ -4,7 +4,8 @@ const scoreElement = document.getElementById('score');
 const timerElement = document.getElementById('timer');
 const questionElement = document.getElementById('question-text');
 const answersElement = document.querySelector('.answers');
-const videoElement = document.getElementById('video');
+//const videoElement = document.getElementById('video');
+var videoElement = document.getElementById('my-video');
 const nextButton = document.getElementById('next-button');
 const shareButton = document.getElementById('share-button');
 const feedbackText = document.getElementById('feedback-text');
@@ -29,7 +30,9 @@ async function setupQuiz() {
     numCorrect = 0;
     currentQuestionNum = 1;
 
-    videoElement.src = "";
+    scoreElement.style.display = "block";
+
+    player.hasStarted(false);
 
     // Hide share button
     shareButton.style.display = 'none';
@@ -209,23 +212,35 @@ function setNextQuestion() {
     }
     clearInterval(timerInterval); // Clear any existing timer
     timeRemaining = 30;
-    timerElement.textContent = `${timeRemaining.toFixed(1)}`; // Reset timer display
+    timerElement.textContent = `Time ${timeRemaining.toFixed(1)}`; // Reset timer display
 
-    showQuestion(selectedQuestions[currentQuestionNum - 1]);
+    player.hasStarted(false);
+
+    questionElement.textContent = "Prepare-se...";
+//    questionElement.style.display = 'none';
+    feedbackText.style.display = 'none';
     updateQuestionNumber();
 
-    timerElement.textContent = "Prepare-se...";
+    const [type, round, url, question, answer0, answer1, answer2, answer3, correctIndex, finalScore, homeOrAway, opponent, desc] = selectedQuestions[currentQuestionNum - 1];
+    player.src({
+        src: "mp4/" + url,
+        type: 'video/mp4'
+    });
+
     setTimeout(function () {
+        player.play();
+        showQuestion(selectedQuestions[currentQuestionNum - 1]);
         startTimer();
-        videoElement.style.opacity = 1;
-    }, 2000); // Delay of 2000ms
+    }, 1000); // Delay of 2000ms
 }
 
 function showQuestion(questionData) {
     const [type, round, url, question, answer0, answer1, answer2, answer3, correctIndex, finalScore, homeOrAway, opponent, desc] = questionData;
-    videoElement.style.opacity = 0;
-    videoElement.src = url;
+//    videoElement.style.opacity = 0;
+//    videoElement.src = url;
+
     questionElement.textContent = question;
+//    questionElement.style.display = 'block';
 
     inf = "";
     if (homeOrAway == "Home") {
@@ -234,7 +249,6 @@ function showQuestion(questionData) {
         inf = "<span style='color: green;'>Jornada " + round + " : " + opponent + " " + finalScore + " Sporting CP<br>";
     }
     feedbackText.innerHTML = inf + desc + "</span>";
-    feedbackText.style.display = 'none';
 
     const answers = [answer0, answer1, answer2, answer3];
     answers.forEach((answer, index) => {
@@ -320,24 +334,24 @@ function startTimer() {
             selectAnswer({ target: {} }); // Automatically select an empty answer if time runs out
         }
 
-        timerElement.textContent = `${timeRemaining.toFixed(1)}`;
+        timerElement.textContent = `Time ${timeRemaining.toFixed(1)}`;
     }, 100);
 }
 
 function updateQuestionNumber() {
-    questionNumberElement.textContent = `${currentQuestionNum}/${numQuestions}`;
+    questionNumberElement.textContent = `Question ${currentQuestionNum}/${numQuestions}`;
     let scoreValue = Math.round(score);
-    scoreElement.textContent = `Pontuação: ${scoreValue}`;
+    scoreElement.textContent = `Score ${scoreValue}`;
 }
 
 function showResult() {
     //    resultContainer.style.display = 'block';
     //    resultText.innerText = `You scored ${score} points!`;
 
-    questionNumberElement.textContent = `Correct: ${numCorrect}/${numQuestions}`;
-    scoreElement.textContent = "";
+    questionNumberElement.textContent = `${numCorrect}/${numQuestions} Correct`;
+    scoreElement.style.display = "none";
     let finalScore = Math.round(score);
-    scoreElement.textContent = `Pontuação final: ${finalScore}`;
+    timerElement.textContent = `Final Score ${finalScore}`;
 
     shareButton.style.display = 'block';
 
@@ -363,9 +377,17 @@ function shareWhatsApp() {
     window.open(shareUrl, '_blank');
 }
 
+// Initialize the video player with autoplay, loop, and no controls
+var player = videojs('my-video', {
+    controls: false, // Disable controls
+    autoplay: false,  // Enable autoplay
+    loop: true,      // Enable looping
+    preload: 'auto'
+  });
+
 // Set the iframe to center the image
-videoElement.style.backgroundImage = "url('sporting_badge.png')";
-videoElement.style.opacity = 1;
+//videoElement.style.backgroundImage = "url('sporting_badge.png')";
+//videoElement.style.opacity = 1;
 scoreElement.textContent = `quiz1906.github.io`;
 // Share button
 shareButton.style.display = 'none';
