@@ -227,5 +227,5 @@ iframe.fade-in {
   }
   
   .video-js .vjs-poster {
-    object-fit: contain; /* Ensure the poster image covers the video area */
+    object-fit: scale-down; 
   }
