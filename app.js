@@ -4,7 +4,6 @@ const scoreElement = document.getElementById('score');
 const timerElement = document.getElementById('timer');
 const questionElement = document.getElementById('question-text');
 const answersElement = document.querySelector('.answers');
-//const videoElement = document.getElementById('video');
 var videoElement = document.getElementById('my-video');
 const nextButton = document.getElementById('next-button');
 const shareButton = document.getElementById('share-button');
@@ -216,31 +215,24 @@ function setNextQuestion() {
 
     player.pause();
 
-    videoElement.addEventListener('canplaythrough', readytoStartQuestion);
-
     questionElement.textContent = "Prepare-se...";
     feedbackText.style.display = 'none';
     updateQuestionNumber();
 
-    const [type, round, url, question, answer0, answer1, answer2, answer3, correctIndex, finalScore, homeOrAway, opponent, desc] = selectedQuestions[currentQuestionNum - 1];
+    const [, , url] = selectedQuestions[currentQuestionNum - 1];
     player.src({
         src: "mp4/" + url,
         type: 'video/mp4'
     });
     player.load(); // Start loading the video
-
-//    setTimeout(function () {
-//        player.play();
-//        showQuestion(selectedQuestions[currentQuestionNum - 1]);
-//        startTimer();
-    //}, 1000); // Delay of 2000ms
+    console.log('loading video');
 }
 
 function readytoStartQuestion() {
-    videoElement.removeEventListener('canplaythrough', readytoStartQuestion);
+    console.log('readyToStart');
     player.play(); 
     showQuestion(selectedQuestions[currentQuestionNum - 1]);
-    startTimer();
+    startTimer(); 
 }
 
 function showQuestion(questionData) {
@@ -403,6 +395,7 @@ player.on('fullscreenchange', function() {
     player.exitFullscreen(); // Exit fullscreen immediately if triggered
   }
 });
+player.on("canplaythrough", readytoStartQuestion);
 
 scoreElement.textContent = `quiz1906.github.io`;
 shareButton.style.display = 'none';
