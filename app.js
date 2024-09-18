@@ -216,6 +216,8 @@ function setNextQuestion() {
     player.pause();
 
     questionElement.textContent = "Prepare-se...";
+    questionElement.style.display = 'block';
+
     feedbackText.style.display = 'none';
     updateQuestionNumber();
 
