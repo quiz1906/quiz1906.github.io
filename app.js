@@ -399,6 +399,15 @@ player.on('fullscreenchange', function() {
 });
 player.on("canplaythrough", readytoStartQuestion);
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        console.log('Page hidden, pausing video.');
+        player.pause();
+      }
+    });
+});
+
 scoreElement.textContent = `quiz1906.github.io`;
 shareButton.style.display = 'none';
 shareButton.addEventListener('click', shareWhatsApp);
