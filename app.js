@@ -23,7 +23,6 @@ let timerInterval;
 let questions = []; // To store the fetched quiz data
 let selectedQuestions = []; // To store the 10 selected random questions
 
-
 // Fetch and Start Quiz
 async function setupQuiz() {
     score = 0;
@@ -36,6 +35,7 @@ async function setupQuiz() {
 
     // Hide share button
     shareButton.style.display = 'none';
+    questionElement.style.display = 'none';
 
     // Fetch quiz data
     showSpinner();
@@ -210,14 +210,15 @@ function setNextQuestion() {
     while (answersElement.firstChild) {
         answersElement.removeChild(answersElement.firstChild);
     }
-    clearInterval(timerInterval); // Clear any existing timer
+    clearInterval(timerInterval); 
     timeRemaining = 30;
-    timerElement.textContent = `Time ${timeRemaining.toFixed(1)}`; // Reset timer display
+    timerElement.textContent = `Time ${timeRemaining.toFixed(1)}`; 
 
-    player.hasStarted(false);
+    player.pause();
+
+    videoElement.addEventListener('canplaythrough', readytoStartQuestion);
 
     questionElement.textContent = "Prepare-se...";
-//    questionElement.style.display = 'none';
     feedbackText.style.display = 'none';
     updateQuestionNumber();
 
@@ -226,21 +227,26 @@ function setNextQuestion() {
         src: "mp4/" + url,
         type: 'video/mp4'
     });
+    player.load(); // Start loading the video
 
-    setTimeout(function () {
-        player.play();
-        showQuestion(selectedQuestions[currentQuestionNum - 1]);
-        startTimer();
-    }, 1000); // Delay of 2000ms
+//    setTimeout(function () {
+//        player.play();
+//        showQuestion(selectedQuestions[currentQuestionNum - 1]);
+//        startTimer();
+    //}, 1000); // Delay of 2000ms
+}
+
+function readytoStartQuestion() {
+    videoElement.removeEventListener('canplaythrough', readytoStartQuestion);
+    player.play(); 
+    showQuestion(selectedQuestions[currentQuestionNum - 1]);
+    startTimer();
 }
 
 function showQuestion(questionData) {
     const [type, round, url, question, answer0, answer1, answer2, answer3, correctIndex, finalScore, homeOrAway, opponent, desc] = questionData;
-//    videoElement.style.opacity = 0;
-//    videoElement.src = url;
 
     questionElement.textContent = question;
-//    questionElement.style.display = 'block';
 
     inf = "";
     if (homeOrAway == "Home") {
@@ -377,22 +383,30 @@ function shareWhatsApp() {
     window.open(shareUrl, '_blank');
 }
 
-// Initialize the video player with autoplay, loop, and no controls
 var player = videojs('my-video', {
     controls: false, // Disable controls
     autoplay: false,  // Enable autoplay
     loop: true,      // Enable looping
-    preload: 'auto'
+    preload: 'auto',
+    controlBar: {
+        fullscreenToggle: false // Disable fullscreen button from Video.js options
+    }
   });
 
-// Set the iframe to center the image
-//videoElement.style.backgroundImage = "url('sporting_badge.png')";
-//videoElement.style.opacity = 1;
+// Disable fullscreen mode via JavaScript
+player.on('dblclick', function(e) {
+  e.preventDefault(); // Prevent double-clicking to trigger fullscreen
+});
+
+player.on('fullscreenchange', function() {
+  if (player.isFullscreen()) {
+    player.exitFullscreen(); // Exit fullscreen immediately if triggered
+  }
+});
+
 scoreElement.textContent = `quiz1906.github.io`;
-// Share button
 shareButton.style.display = 'none';
 shareButton.addEventListener('click', shareWhatsApp);
-// Start button
 nextButton.textContent = "Começar";
 nextButton.style.display = 'block';
 nextButton.addEventListener('click', setupQuiz);
