@@ -79,7 +79,7 @@ async function fetchTotalRows() {
     }
 }
 
-// Function to get 100 unique random integers
+// Function to get unique random integers
 function getUniqueRandomNumbers(totalRows, count) {
     const uniqueNumbers = new Set();
     while (uniqueNumbers.size < count) {
@@ -108,11 +108,11 @@ async function fetchRowsInSingleCall(rowNumbers) {
     }
 }
 
-// Main function to get 100 random rows
+// Main function to get 10 random rows
 async function getRandomRows() {
     try {
         const totalRows = await fetchTotalRows();
-        const randomRowNumbers = getUniqueRandomNumbers(totalRows, 100);
+        const randomRowNumbers = getUniqueRandomNumbers(totalRows, 10);
         const randomRows = await fetchRowsInSingleCall(randomRowNumbers);
         return randomRows;
     } catch (error) {
@@ -126,12 +126,14 @@ async function fetchQuizData() {
     try {
         // Fetch the questions
         let q = await getRandomRows();
-        //console.log("Fetched questions:", q); // Log fetched data
+        console.log("Fetched questions:", q); // Log fetched data
 
         if (!q || !Array.isArray(q)) {
             throw new Error("Invalid question data format. Expected an array.");
         }
 
+        return q
+    
         const groupedQuestions = {};
 
         // Grouping questions by type and jornada
