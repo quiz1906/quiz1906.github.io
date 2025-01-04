@@ -46,8 +46,8 @@ async function setupQuiz() {
         return;
     }
 
-    nextButton.removeEventListener('click', setupQuiz.bind(this));
-    nextButton.addEventListener('click', setNextQuestion.bind(this));
+    nextButton.removeEventListener('click', setupQuiz);
+    nextButton.addEventListener('click', setNextQuestion);
     hideSpinner();
 
     setNextQuestion();
@@ -264,7 +264,7 @@ function showQuestion(questionData) {
         if (index == correctIndex) {
             button.dataset.correct = true;
         }
-        button.addEventListener('click', selectAnswer.bind(this));
+        button.addEventListener('click', selectAnswer);
         answersElement.appendChild(button);
     });
 }
@@ -364,8 +364,8 @@ function showResult() {
     // Reset the quiz for a new game
     nextButton.textContent = "Reiniciar Jogo";
     nextButton.style.display = 'block';
-    nextButton.removeEventListener('click', setNextQuestion.bind(this));
-    nextButton.addEventListener('click', setupQuiz.bind(this));
+    nextButton.removeEventListener('click', setNextQuestion);
+    nextButton.addEventListener('click', setupQuiz);
 }
 
 function shareWhatsApp() {
@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 scoreElement.textContent = `quiz1906.github.io`;
 shareButton.style.display = 'none';
-shareButton.addEventListener('click', shareWhatsApp.bind(this));
+shareButton.addEventListener('click', shareWhatsApp);
 nextButton.textContent = "Começar";
 nextButton.style.display = 'block';
-nextButton.addEventListener('click', setupQuiz.bind(this));
+nextButton.addEventListener('click', setupQuiz);
