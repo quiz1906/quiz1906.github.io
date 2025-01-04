@@ -13,6 +13,7 @@ const sheetId = '1G_9MKgv0tCT53b3RULeAJso5NcwfBpJMxMh2-nc_eZY';
 const apiKey = 'AIzaSyCzfZsQXsHUJR2CWFwxH2iyZ1f9z5gI41g';
 const sheetName = '24_25_questions';
 
+let questionStarted = false; // State to prevent duplicate calls
 let currentQuestionNum = 1;
 let score = 0;
 let numQuestions = 10;
@@ -206,6 +207,7 @@ async function fetchQuizData() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function setNextQuestion() {
+    questionStarted = false; // Reset state for the next question
     nextButton.style.display = 'none';
 
     while (answersElement.firstChild) {
@@ -233,6 +235,8 @@ function setNextQuestion() {
 }
 
 function readytoStartQuestion() {
+    if (questionStarted) return; // Skip if already handled
+    questionStarted = true;
     console.log('readyToStart');
     player.play(); 
     showQuestion(selectedQuestions[currentQuestionNum - 1]);
@@ -399,7 +403,7 @@ player.on('fullscreenchange', function() {
     player.exitFullscreen(); // Exit fullscreen immediately if triggered
   }
 });
-player.on("canplaythrough", readytoStartQuestion);
+player.on("loadeddata", readytoStartQuestion);
 
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('visibilitychange', function() {
